@@ -1,8 +1,8 @@
 import axios from "axios";
 import router from "@/router";
-import Define from "@/utils/define";
-import CommonUtil from "@/lib/CommonUtil";
-import NativeUtil from '@/lib/NativeUtil';
+import Define from "@/common/define";
+import CommonUtil from "@/utils/CommonUtil";
+import NativeUtil from '@/utils/NativeUtil';
 import EventBus, { $alert, $confirm, $list } from '@/common/EventBus';
 import { fetchData } from '@/common/service.api';
 

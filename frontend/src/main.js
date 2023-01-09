@@ -27,7 +27,7 @@ Vue.mixin(commonMixin);
 import Fragment from "vue-fragment";
 Vue.use(Fragment.Plugin);
 
-import global from "./plugins/global";
+import global from "./plugins/biz.util";
 import "./plugins/directive.js";
 
 import '@/common/$mcore.js';

@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import CommonUtil from "@/lib/CommonUtil";
+import CommonUtil from "@/utils/CommonUtil";
 
 export default {
   name: "Login",

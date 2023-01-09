@@ -1,4 +1,4 @@
-import CommonUtil from "@/lib/CommonUtil";
+import CommonUtil from "@/utils/CommonUtil";
 
 var lodash = require('lodash');
 

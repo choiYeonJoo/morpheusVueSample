@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import LoadingBar from "@/components/common/LoadingBar";
+import LoadingBar from "@/components/layout/LoadingBar";
 
 export default {
   name: "SideMenu",

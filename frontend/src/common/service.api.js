@@ -6,7 +6,7 @@ import axios from "axios";
 import store from "@/store";
 import router from "@/router";
 import { $alert } from "@/common/EventBus";
-import CommonUtil from "@/lib/CommonUtil";
+import CommonUtil from "@/utils/CommonUtil";
 
 let configSet = {};
 let fetchDataErrorCodes = []

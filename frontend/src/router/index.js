@@ -1,9 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Define from "@/utils/define";
+import Define from "@/common/define";
 import store from "@/store";
 import EventBus from "@/common/EventBus";
-import CommonUtil from "@/lib/CommonUtil";
+import CommonUtil from "@/utils/CommonUtil";
 
 const Landing = () => import(/* webpackChunkName: "chunk/model" */'../views/Landing');
 const Dashboard = () => import(/* webpackChunkName: "chunk/model" */'../views/Dashboard/Dashboard');
