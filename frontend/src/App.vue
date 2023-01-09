@@ -9,7 +9,7 @@
 
 <script>
 import TheLayout from "@/layouts/TheLayout";
-import Common from "@/components/layout/Common";
+import Common from "@/components/layout/CommonPopup";
 
 export default {
   // name: "App",
