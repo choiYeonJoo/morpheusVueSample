@@ -5,6 +5,10 @@ import store from "@/store";
 import EventBus from "@/common/EventBus";
 import CommonUtil from "@/utils/CommonUtil";
 
+const AlertTest = () => import(/* webpackChunkName: "chunk/model" */'../views/AlertTest');
+const ConfirmTest = () => import(/* webpackChunkName: "chunk/model" */'../views/ConfirmTest');
+
+
 const Landing = () => import(/* webpackChunkName: "chunk/model" */'../views/Landing');
 const Dashboard = () => import(/* webpackChunkName: "chunk/model" */'../views/Dashboard/Dashboard');
 const Login = () => import(/* webpackChunkName: "chunk/model" */'../views/Login/Login');
@@ -14,6 +18,9 @@ const router = new Router({
   mode: "hash",
   // base: '/', // only history mode
   routes: [
+    { path: "/alert-test", name: "alert 테스트", component: AlertTest },
+    { path: "/confirm-test", name: "alert 테스트", component: ConfirmTest },
+
     { path: "/", name: "landing", component: Landing },
     { path: "/landing", name: "landing", component: Landing },
     {
@@ -54,10 +61,10 @@ router.beforeEach((to, from, next) => {
   // 로그인인 경우 바로 이동한다
   if(toPath === '/login') return next();
   // 로그인 여부를 체크하여 화면이동을 처리한다. 세션 유지 상태를 확인한다
-  if(!anonymous_pages.includes(toPath)) {
-    const session = store.getters['userAuth/getLoginSession'];
-    if(CommonUtil.isEmpty(session.refreshToken)) return next('/login');
-  }
+  // if(!anonymous_pages.includes(toPath)) {
+  //   const session = store.getters['userAuth/getLoginSession'];
+  //   if(CommonUtil.isEmpty(session.refreshToken)) return next('/login');
+  // }
   // 첫페이지인 경우 화면이 뜰 수 있도록..
   if(from.name == null) return next();
 

@@ -47,6 +47,8 @@ frontend 폴더 구조
     * NativeUtil.ts _모피어스 확장 함수 정의_
   * views _각 화면별 파일_
     * Landing.vue _제일 첫 페이지로 사용 (리소스 업데이트, 스토어에 데이터 유지 등 로직 포함)_
+    * AlertTest.vue _스크립트 alert 팝업을 사용할 시 샘플 소스 적용_
+    * ConfirmTest.vue _스크립트 confirm 팝업을 사용할 시 샘플 소스 적용_
 * App.vue _기본 Vue 레이아웃_
 * main.js _css, 공통 라이브러리 import_
 * env.development _개발 환경 설정 파일 (서버 주소 등)_
