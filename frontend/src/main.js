@@ -21,18 +21,15 @@ import moment from "moment";
 moment.locale("ko");
 Vue.use(vueMoment, {moment});
 
-import commonMixin from './mixin/commonmixin';
+import commonMixin from './mixin/biz.util';
 Vue.mixin(commonMixin);
 
 import Fragment from "vue-fragment";
 Vue.use(Fragment.Plugin);
 
-import global from "./plugins/biz.util";
 import "./plugins/directive.js";
 
 import '@/common/$mcore.js';
-
-Vue.mixin(global);
 
 // 모든 페이지에서 안드로이드 백키에 대한 공통처리
 const exit_pages = ['/', '/login', '/dashboard',  '/landing'];

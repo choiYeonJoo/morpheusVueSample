@@ -6,8 +6,24 @@ export default {
   data() {
     return {};
   },
+  /* 공통설정부분 */
+  layout(context) {
+    /* 팝업 유무 설정 */
+    let layoutContent = 'default';
+    if (context.route.name === 'index') layoutContent = 'login';
+    else if (context.query.popOpen && context.query.popOpen === 'true') layoutContent = 'popup';
+    return layoutContent;
+  },
   computed: {
-    ...mapGetters({}),
+    ...mapGetters({
+      getLoginSession: 'userAuth/getCachedUser',
+    }),
+  },
+  methods: {
+    $t(msg){
+      console.log(msg);
+      return msg;
+    },
   },
   beforeRouteLeave(to, from, next) {
     // 화면에서도 로그인으로 이동처리가 되는 경우 기타 팝업은 무시하고 이동되도록 처리
@@ -22,7 +38,5 @@ export default {
       next(true);
     }, 0);
 
-  },
-  methods: {
   },
 };
