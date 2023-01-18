@@ -31,9 +31,8 @@ frontend 폴더 구조
     * EmptyLayout.vue _헤더푸터가 없는 레이아웃_
     * TheLayout.vue _레이아웃 종류를 나눠 호출_
   * mixin
-    * commonmixin.js _mixin 파일을 정의_
+    * biz.util.js _화면 내 biz 로직에 대한 util 함수를 mixin 으로 정의_
   * plugins
-    * biz.util.js _화면 내 biz 로직에 대한 util 함수를 정의_
     * common.js _공통 prototype 정의_
     * directive.js _공통 directive 정의_
   * router
