@@ -1,6 +1,10 @@
 <template>
-  <div>
-    랜딩 페이지 (리소스 업데이트 진행)
+  <div class="landing-wrap">
+    <div class="resource-prg">
+      <p class="prg-txt">리소스 업데이트 중입니다.</p>
+      <progress :value="resourcedata" max=100></progress>
+      <p class="version">v {{CommonUtil.getBuildVersion()}}</p>
+    </div>
   </div>
 </template>
 
@@ -12,7 +16,7 @@ export default {
   components: {},
   data() {
     return {
-      
+      resourcedata : 0,
     };
   },
   async mounted() {
@@ -30,22 +34,36 @@ export default {
 
       if(isMorpheus()){
         if(M.info.app('manifest.resource.target') === 'doc'){
-        //일단 에러 나서 주석
-          //인터넷이 연결이 되어 있으면
           await this.resourceUpdate();
-          this.$router.replace("/login");
+          this.moveLogin();
         }else{
-          this.$router.replace("/login");
+          setTimeout(()=>{
+            this.moveLogin();
+          },500);
         }
       }else{
-        this.$router.replace("/login");
+        let itvIdx = setInterval(()=>{
+          if(this.resourcedata == 100){
+            clearInterval(itvIdx);
+            setTimeout(()=>{
+              this.moveLogin();
+            },500);
+          }
+          this.resourcedata += 1;
+        },1)
       }
+    },
+    async moveLogin(){
+      this.resourcedata = 100;
+      setTimeout(()=>{
+        this.$router.replace("/login");
+      },100);
     },
     resourceUpdate() {
       return new Promise((resolve, reject) => {
         // TODO: 리소스 업데이트 이후 정책 확인 필요
         M.net.res.check({
-          callback: function (status, info) {
+          callback: (status, info) => {
             if (status !== 'IS_RESOURCE_UPDATE') {
               if(status == "FORCED_APP_UPDATING"){
                 M.pop.alert({
@@ -91,7 +109,7 @@ export default {
             if (info.update) {
               // 업데이트 가능한 경우
               M.net.res.update({
-                finish: function (status, info, option) {
+                finish: (status, info, option) => {
                   switch (status) {
                     // 리소스 업데이트 성공
                     // 리소스 업데이트 성공 And Refresh
@@ -185,15 +203,14 @@ export default {
                       break;
                   }
                 },
-                progress: function (total, read, remain, percentage, option) {
+                progress: async (total, read, remain, percentage, option) => {
                   console.log('** progress', total, read, remain, percentage);
+                  this.resourcedata = Number(percentage);
                   // var progressBarWidth = Math.max(Math.min(percentage, 100), 0) + "%";
                   // $(".progress-bar").css("width", progressBarWidth);
                   // $(".progress-percent").html(percentage + '%');
                 },
-                error: function (errCode, errMsg, option) {
-                  var callback = M.response.on(() => {}).toString();
-                  M.execute("addLog", "** error : "+ errCode+ errMsg, callback);
+                error: (errCode, errMsg, option) => {
                   M.pop.alert({
                     title: '알림',
                     message: '알 수 없는 오류입니다.',

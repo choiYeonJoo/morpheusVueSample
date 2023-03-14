@@ -71,9 +71,7 @@ export default class CommonUtil {
   //앱 버전 정보 반환
   static getBuildVersion(){
     return isMorpheus() ? 
-    M.info.app('app.version') + " / "
-    + M.info.app('manifest.resource.target').charAt(0) + M.info.app('manifest.network.http.RES_UPDATE.address').charAt(13) + ""
-    + M.info.app('resource.current_version')
+    `${M.info.app('app.version')} / ${M.info.app('resource.current_version')}`
     :
     "웹 테스트 버전"
   }
