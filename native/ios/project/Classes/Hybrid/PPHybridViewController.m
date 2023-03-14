@@ -24,6 +24,7 @@
     
     // NavigationBar 는 사용하지 않으므로 Hidden
     self.navigationController.navigationBarHidden = YES;
+    [_poperaWebview scrollView].contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 }
 
 /*
@@ -33,6 +34,13 @@
     self.backgroundView.backgroundColor = [UIColor blackColor];
     return UIStatusBarStyleLightContent;
 }
+-(BOOL)useStatusBarView
+
+  {
+
+          return NO;
+
+  }
 
 /*
  * @brief StatusBar 표시 여부
