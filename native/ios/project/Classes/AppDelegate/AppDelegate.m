@@ -16,7 +16,7 @@
     // Override point for customization after application launch.
     
     window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    navigationController = [MAppDelegate initialViewControllerWithLaunchOptions:launchOptions];
+    navigationController = [MAppDelegate initialViewControllerWithLaunchOptions:launchOptions history:YES];
     
     [window setBackgroundColor:[UIColor blackColor]];
     [window setRootViewController:navigationController];
