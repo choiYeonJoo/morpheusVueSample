@@ -6,6 +6,16 @@ import m.client.android.library.core.utils.CommonLibUtil;
 import m.client.android.library.core.utils.PLog;
 import m.client.android.library.core.view.MainActivity;
 
+import m.client.android.library.core.customview.MPWebView;
+import android.content.pm.PackageManager;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import android.util.Log;
+import m.client.android.library.core.managers.ActivityHistoryManager;
+
+import android.webkit.PermissionRequest;
+import android.Manifest;
+
 import android.app.DownloadManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -70,9 +80,17 @@ public class BaseActivity extends MainActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		getWebView().setWebChromeClient(new CustomWebChromeClient(this, getWebView().getWNInterfaceManager().getInterfaceJS()));
-//		getWebView().setDownloadListener(new MyWebViewClient());
 	}
+
+	@Override
+	protected MPWebView setWebView() {
+		MPWebView mpWebView = super.setWebView();
+		mpWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+		mpWebView.getSettings().setMediaPlaybackRequiresUserGesture(false);
+		mpWebView.setWebChromeClient(new CustomWebChromeClient(this, getCurrentWNInterfaceManager().getInterfaceJS()));
+		return mpWebView;
+	}
+
 	/**
 	 * Webview가 시작 될 때 호출되는 함수
 	 */
@@ -83,6 +101,41 @@ public class BaseActivity extends MainActivity {
 		//시스템 폰트 사이즈 무시
 		if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
 			view.getSettings().setTextZoom(100);
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		if ( requestCode == 5 ){
+			// 앱실행시 권한 요청을 한 경우 들어오게 되는 페이지.
+			if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {  // 권한 요청이 성공하였을 경우 실행됨.
+				if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+				|| ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+				|| ContextCompat.checkSelfPermission(this, Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED
+				) {
+					Toast.makeText(this, "권한 설정 후 이용해주시기 바랍니다.", Toast.LENGTH_SHORT).show();
+					ActivityCompat.finishAffinity(this);
+				}else{
+					final MainActivity activity = (MainActivity) ActivityHistoryManager.getInstance().getTopActivity();
+					activity.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								activity.getWebView().loadUrl(
+										"javascript:onRequestPermissionsResult();");
+							} catch (NullPointerException e) {
+								Log.d("ERROR", e.getMessage());
+							}
+						}
+					});
+				}
+
+			} else {  //권한 요청이 거절되었을 경우나 항상 거절이 되었을 경우 실행 됨
+				//권한 요청이 거절되었을 경우나 항상 거절이 되었을 경우 실행 됨.
+				Toast.makeText(this, "권한 설정 후 이용해주시기 바랍니다.", Toast.LENGTH_SHORT).show();
+				ActivityCompat.finishAffinity(this);
+			}
 		}
 	}
 	
@@ -99,6 +152,13 @@ public class BaseActivity extends MainActivity {
 
 		public CustomWebChromeClient(MainActivity _callerObject, InterfaceJavascript IFjscript) {
 			super(_callerObject, IFjscript);
+		}
+
+		@Override
+		public void onPermissionRequest(PermissionRequest request) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				request.grant(request.getResources());
+			}
 		}
 
 		//For Android 5.0+

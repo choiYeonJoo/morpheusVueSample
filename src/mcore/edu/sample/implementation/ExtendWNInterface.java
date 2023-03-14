@@ -1,5 +1,13 @@
 package mcore.edu.sample.implementation;
 
+import android.content.pm.PackageManager;
+import m.client.android.library.core.view.MainActivity;
+import m.client.android.library.core.managers.ActivityHistoryManager;
+
+import android.Manifest;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import m.client.android.library.core.bridge.InterfaceJavascript;
 import m.client.android.library.core.utils.PLog;
 import m.client.android.library.core.view.AbstractActivity;
@@ -151,5 +159,44 @@ public class ExtendWNInterface extends InterfaceJavascript {
 			}
 			System.exit(0);
 		}).start();
+	}
+
+	public void exWNCheckPermission(){
+		if (ContextCompat.checkSelfPermission(callerObject, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+		|| ContextCompat.checkSelfPermission(callerObject, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED
+		|| ContextCompat.checkSelfPermission(callerObject, Manifest.permission.MODIFY_AUDIO_SETTINGS) != PackageManager.PERMISSION_GRANTED
+		) {
+
+			// 이 권한에 필요한 이유를 설명
+			if (ActivityCompat.shouldShowRequestPermissionRationale(callerObject, Manifest.permission.CAMERA)
+			|| ActivityCompat.shouldShowRequestPermissionRationale(callerObject, Manifest.permission.RECORD_AUDIO)
+			|| ActivityCompat.shouldShowRequestPermissionRationale(callerObject, Manifest.permission.MODIFY_AUDIO_SETTINGS)
+			) {
+				// 다이어로그같은것을 띄워서 사용자에게 해당 권한이 필요한 이유에 대해 설명합니다
+				// 해당 설명이 끝난뒤 requestPermissions()함수를 호출하여 권한허가를 요청해야 합니다
+
+				// Toast.makeText(this, "해당 권한은 외부 저장소에 있는 바이러스 탐지를 위한 것입니다.", Toast.LENGTH_SHORT).show();
+				ActivityCompat.requestPermissions(callerObject, new String[] {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS}, 5);
+			} else {
+				ActivityCompat.requestPermissions(callerObject, new String[] {Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS}, 5);
+				// 필요한 권한과 요청 코드를 넣어서 권한허가요청에 대한 결과를 받아야 합니다
+			}
+		}else{
+			final MainActivity activity = (MainActivity) ActivityHistoryManager.getInstance().getTopActivity();
+			callerObject.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						activity.getWebView().loadUrl(
+								"javascript:onRequestPermissionsResult();");
+					}
+					catch(NullPointerException e) {
+						PLog.d("ERROR", "error["+e.getMessage());
+					} catch (Exception e) {
+						PLog.d("ERROR", "error["+e.getMessage());
+					}
+				}
+			});
+		}
 	}
 }
